@@ -1,6 +1,6 @@
 clear
 echo "====================exproler+============"
-prev_dir="" 
+prev_dir="" # Инициализируем переменную для памяти (пустую)
 
 while true; do
     clear
@@ -11,17 +11,17 @@ while true; do
     ls
     echo ""
     echo "0 - доп опции"
-    echo "7 - открыть файл"
+    echo "7 - открыть файл 8- создать папку 9- создать файл 10- удалить папку"
     echo "1- назад 2- перейти к пути 3- обновить 4- вернуться обратно 5  - прочитать/ изменить  файл 6 - удалить файл"
     read -p "Введи цифру: " a
 
     case $a in
         1)
-            prev_dir=$(pwd) 
+            prev_dir=$(pwd) # Запоминаем текущую папку перед уходом
             cd ..
             ;;
         2)
-            prev_dir=$(pwd) 
+            prev_dir=$(pwd) # Запоминаем текущую папку перед уходом
              echo " введите путь как папку( например вы видите папку 123 для ее открытия введите 123)" 
              read -p "Введи путь: " path
              
@@ -30,7 +30,7 @@ while true; do
         3)
             ;;
         4)
-           
+            # Проверяем, есть ли запомненная папка (не пустая ли)
             if [ -n "$prev_dir" ]; then
                 cd "$prev_dir"
             else
@@ -72,20 +72,43 @@ while true; do
 
 
 
+        8)
+                read -p "имя папки:" filename;
+                mkdir "$filename"
+                ;;
+        
+
+        9)
+                read -p"имя файла:" filename;
+                touch  "$filename"
+                nano "$filename"
+                ;;
+        
+        10)
+                read -p"имя папки:" filename;
+                if [ -d "$filename"  ]; then
+                rm -r "$filename"
+                else
+                echo файл не найден
+                sleep 1
+                fi
+                ;;
+                
 
                 0)
+            echo "Дополнительные опции:"
             echo "Дополнительные опции:"
             echo "1 - Установить команду exproler для текущего пользователя"
             echo "2 - Выход"
             read -p "Выбери опцию: " sub
             case $sub in
                 1)
-                    
+                    # Создаём папку bin, если её нет
                     mkdir -p ~/bin
-                    
+                    # Копируем скрипт
                     cp "$0" ~/bin/exproler
                     chmod +x ~/bin/exproler
-                    #
+                    # Добавляем путь в .bashrc, если его там нет
                     if ! grep -q 'export PATH="$HOME/bin:$PATH"' ~/.bashrc; then
                         echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
                     fi
