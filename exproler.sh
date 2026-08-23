@@ -1,22 +1,38 @@
+#!/bin/bash
+
+
 clear
 echo "====================exproler+============"
+
+blue()   { echo -e "\033[1;34m"; }   
+yellow() { echo -e "\033[1;33m"; }   
+reset()  { echo -e "\033[0m"; } 
+
+
+                      
 prev_dir="" 
 
 while true; do
+    reset
     clear
     echo "====================exproler+============"   
+    yellow
     echo вы в
     pwd
     echo --
-    ls
+    reset
+     ls
     echo ""
     echo ""
     echo ""
     echo "===============инструменты============="
+    blue
     echo "0 - доп опции"
     echo "7 - открыть файл 8- создать папку 9- создать файл 10- удалить папку 11- открыть файл с правами админа"
     echo "1- назад 2- перейти к пути 3- обновить 4- вернуться обратно 5  - прочитать/ изменить  файл 6 - удалить файл"
+    reset
     read -p "Введи цифру: " a
+
 
     case $a in
         1)
@@ -29,6 +45,7 @@ while true; do
              read -p "Введи путь: " path
              
             cd "$path"
+            sleep 0.5 
             ;;
         3)
             ;;
@@ -147,7 +164,7 @@ while true; do
                     sleep 2
                     ;;
                 2)
-                    return
+                    retrun
                     ;;
                 *)
                     echo "Неверная опция"
