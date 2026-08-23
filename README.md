@@ -12,7 +12,8 @@
 3. выберите пумкт для для добавления команды
 4. готово проводник можно запусить из из любого места место коммандой exproler
 
-<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/1364f691-c9b7-4afc-8856-339ddbeb56c7" />
+# интерфейс
 
-<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/3e28bb92-a482-4f16-aafc-f22072a8ff03" />
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/1798983d-286a-4360-813f-da56414ae6d6" />
 
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/01f44ee2-b0dc-413a-a81b-16ce3885bfbd" />
