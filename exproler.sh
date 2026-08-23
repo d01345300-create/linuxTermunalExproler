@@ -8,12 +8,7 @@ prev_dir=""
 
 interactive_select() {
     local selected=0
-    local key=""
-    local key2=""
-    local key3=""
-    local chosen=""
-    local item=""
-    local display=""
+    local key key2 key3 chosen item display
     local entries=()
 
     while true; do
@@ -29,7 +24,6 @@ interactive_select() {
 
         clear
         echo "====================exproler+============"
-
         yellow
         echo "вы в"
         pwd
@@ -67,68 +61,51 @@ interactive_select() {
             $'\x1b')
                 key2=""
                 key3=""
-
                 IFS= read -rsn1 -t 0.1 key2
                 IFS= read -rsn1 -t 0.1 key3
 
                 case "$key2$key3" in
                     "[A")
-                        if (( selected > 0 )); then
-                            ((selected--))
-                        fi
+                        (( selected > 0 )) && ((selected--))
                         ;;
                     "[B")
-                        if (( selected < ${#entries[@]} - 1 )); then
-                            ((selected++))
-                        fi
+                        (( selected < ${#entries[@]} - 1 )) && ((selected++))
                         ;;
                 esac
                 ;;
 
             "")
-                if (( ${#entries[@]} > 0 )); then
-                    chosen="${entries[$selected]}"
+                (( ${#entries[@]} == 0 )) && continue
+                chosen="${entries[$selected]}"
 
-                    if [ -d "$chosen" ]; then
-                        old_dir=$(pwd)
+                if [ -d "$chosen" ]; then
+                    old_dir=$(pwd)
+                    if cd -- "$chosen"; then
+                        prev_dir="$old_dir"
+                        selected=0
+                    else
+                        echo "Не удалось открыть папку"
+                        sleep 1
+                    fi
 
-                        if cd -- "$chosen"; then
-                            prev_dir="$old_dir"
-                            selected=0
+                elif [ -f "$chosen" ]; then
+                    if [ -x "$chosen" ] && { [[ "$chosen" != *.* ]] || [[ "$chosen" == *.sh ]]; }; then
+                        clear
+                        echo "Запуск: $(pwd)/$chosen"
+                        echo
+                        "./$chosen"
+                        echo
+                        read -r -p "Нажмите Enter чтобы вернуться..." _
+                    else
+                        clear
+                        echo "Открытие: $(pwd)/$chosen"
+                        echo
+
+                        if command -v xdg-open >/dev/null 2>&1; then
+                            xdg-open "$chosen" >/dev/null 2>&1 &
                         else
-                            echo "Не удалось открыть папку"
+                            echo "xdg-open не найден"
                             sleep 1
-                        fi
-
-                    elif [ -f "$chosen" ]; then
-                        if [ -x "$chosen" ] && [[ "$chosen" != *.* ]]; then
-                            clear
-                            echo "Запуск: $(pwd)/$chosen"
-                            echo
-                            "./$chosen"
-                            echo
-                            read -r -p "Нажмите Enter чтобы вернуться..." _
-
-                        elif [ -x "$chosen" ] && [[ "$chosen" == *.sh ]]; then
-                            clear
-                            echo "Запуск: $(pwd)/$chosen"
-                            echo
-                            "./$chosen"
-                            echo
-                            read -r -p "Нажмите Enter чтобы вернуться..." _
-
-                        else
-                            clear
-                            echo "Открытие:"
-                            echo "$(pwd)/$chosen"
-                            echo
-
-                            if command -v xdg-open >/dev/null 2>&1; then
-                                xdg-open "$chosen" >/dev/null 2>&1 &
-                            else
-                                echo "xdg-open не найден"
-                                sleep 1
-                            fi
                         fi
                     fi
                 fi
@@ -136,7 +113,6 @@ interactive_select() {
 
             $'\x7f'|$'\x08')
                 old_dir=$(pwd)
-
                 if cd ..; then
                     prev_dir="$old_dir"
                     selected=0
@@ -153,13 +129,11 @@ interactive_select() {
     done
 }
 
-
 while true; do
     reset
     clear
 
     echo "====================exproler+============"
-
     yellow
     echo "вы в"
     pwd
@@ -172,7 +146,6 @@ while true; do
     echo
     echo
     echo "===============инструменты============="
-
     blue
     echo "0 - доп опции"
     echo "7 - открыть файл 8- создать папку 9- создать файл 10- удалить папку 11- открыть файл с правами админа"
@@ -185,7 +158,6 @@ while true; do
     case "$a" in
         1)
             old_dir=$(pwd)
-
             if cd ..; then
                 prev_dir="$old_dir"
             else
@@ -197,7 +169,6 @@ while true; do
         2)
             echo "Введите путь как папку (например вы видите папку 123, для её открытия введите 123)"
             read -r -p "Введи путь: " path
-
             old_dir=$(pwd)
 
             if cd -- "$path"; then
@@ -214,7 +185,6 @@ while true; do
         4)
             if [ -n "$prev_dir" ]; then
                 current_dir=$(pwd)
-
                 if cd -- "$prev_dir"; then
                     prev_dir="$current_dir"
                 else
@@ -229,7 +199,6 @@ while true; do
 
         5)
             read -r -p "имя файла: " filename
-
             if [ -f "$filename" ]; then
                 nano -- "$filename"
             else
@@ -240,10 +209,8 @@ while true; do
 
         6)
             read -r -p "имя файла: " filename
-
             if [ -f "$filename" ]; then
                 read -r -p "подтвердите удаление (y/n): " ch
-
                 if [ "$ch" = "y" ]; then
                     rm -- "$filename"
                 else
@@ -258,7 +225,6 @@ while true; do
 
         7)
             read -r -p "имя файла: " filename
-
             if [ -f "$filename" ]; then
                 if command -v xdg-open >/dev/null 2>&1; then
                     echo "$(pwd)/$filename"
@@ -275,7 +241,6 @@ while true; do
 
         8)
             read -r -p "имя папки: " filename
-
             if [ -e "$filename" ]; then
                 echo "файл или папка уже существует"
                 sleep 1
@@ -286,7 +251,6 @@ while true; do
 
         9)
             read -r -p "имя файла: " filename
-
             if [ -e "$filename" ]; then
                 echo "файл уже существует"
                 sleep 1
@@ -302,10 +266,8 @@ while true; do
 
         10)
             read -r -p "имя папки: " filename
-
             if [ -d "$filename" ]; then
                 read -r -p "подтвердите удаление (y/n): " ch
-
                 if [ "$ch" = "y" ]; then
                     rm -r -- "$filename"
                 else
@@ -320,7 +282,6 @@ while true; do
 
         11)
             read -r -p "имя файла: " filename
-
             if [ -f "$filename" ]; then
                 if command -v sudoedit >/dev/null 2>&1; then
                     sudoedit "$filename"
@@ -341,7 +302,6 @@ while true; do
             echo "Дополнительные опции:"
             echo "1 - Установить команду exproler для текущего пользователя"
             echo "2 - Выход"
-
             read -r -p "Выберете опцию: " sub
 
             case "$sub" in
@@ -350,10 +310,7 @@ while true; do
                     cp -- "$0" "$HOME/bin/exproler"
                     chmod +x "$HOME/bin/exproler"
 
-                    if [ ! -f "$HOME/.bashrc" ]; then
-                        touch "$HOME/.bashrc"
-                    fi
-
+                    [ -f "$HOME/.bashrc" ] || touch "$HOME/.bashrc"
                     if ! grep -Fq 'export PATH="$HOME/bin:$PATH"' "$HOME/.bashrc"; then
                         echo 'export PATH="$HOME/bin:$PATH"' >> "$HOME/.bashrc"
                     fi
