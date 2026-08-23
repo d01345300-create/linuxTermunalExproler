@@ -55,7 +55,12 @@ while true; do
         6)
                 read -p "имя файла:" filename;
                 if [ -f "$filename" ]; then
+                read -p "подвердите удаление (y/n):" ch;
+                if [ "$ch" = "y" ] ; then
                 rm "$filename"
+                else
+                echo "отмена"
+                fi
                 else
                 echo файл не найден
                 sleep 1
@@ -77,7 +82,12 @@ while true; do
 
         8)
                 read -p "имя папки:" filename;
+                if [ -d "$filename" ]; then
+                echo " папка уже сущесвутет"
+                sleep 1
+                else
                 mkdir "$filename"
+                fi
                 ;;
         
 
@@ -90,7 +100,13 @@ while true; do
         10)
                 read -p"имя папки:" filename;
                 if [ -d "$filename"  ]; then
+                read -p"подвердите удаление  (y/n):" ch;
+                if [ "$ch" = "y" ]; then
                 rm -r "$filename"
+                else
+                echo отмена
+                sleep 1
+                fi
                 else
                 echo файл не найден
                 sleep 1
@@ -131,7 +147,7 @@ while true; do
                     sleep 2
                     ;;
                 2)
-                    echo "Возвращаемся..."
+                    return
                     ;;
                 *)
                     echo "Неверная опция"
