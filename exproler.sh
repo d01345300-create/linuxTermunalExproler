@@ -11,11 +11,14 @@ reset()  { echo -e "\033[0m"; }
 
                       
 prev_dir="" 
-
+ver="2.0"
 while true; do
     reset
     clear
-    echo "====================exproler+============"   
+    echo "====================exproler+============"
+    blue
+    echo v"$ver"
+    reset
     yellow
     echo вы в
     pwd
@@ -181,41 +184,6 @@ while true; do
 
                 0)
             echo "Дополнительные опции:"
-            echo "1 - Установить команду exproler для текущего пользователя"
-            echo "2 - Выход"
-            read -p "Выберете опцию: " sub
-            case $sub in
-                1)
-                    # Создаём папку bin, если её нет
-                    mkdir -p ~/bin
-                    # Копируем скрипт
-                    cp "$0" ~/bin/exproler
-                    chmod +x ~/bin/exproler
-                    # Добавляем путь в .bashrc, если его там нет
-                    if ! grep -q 'export PATH="$HOME/bin:$PATH"' ~/.bashrc; then
-                        echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
-                    fi
-                    echo "Готово! Теперь команда exproler доступна из любой папки."
-                    echo "Перезапусти терминал или выполни: source ~/.bashrc"
-                    sleep 2
-                    ;;
-                2)
-                        exit 0
-                        retrun
-                    ;;
-                *)
-                    echo "Неверная опция"
-                    ;;
-            esac
-            ;;
-
-        *)
-            echo "Неверная команда"
-            sleep 1
-            ;;
-    esac
-done
-set mark: ...skipping...
             echo "1 - Установить команду exproler для текущего пользователя"
             echo "2 - Выход"
             read -p "Выберете опцию: " sub
