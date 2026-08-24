@@ -11,7 +11,7 @@ reset()  { echo -e "\033[0m"; }
 
                       
 prev_dir="" 
-ver="2.0"
+ver="2.1"
 while true; do
     reset
     clear
@@ -160,6 +160,7 @@ while true; do
         13)
                 blue
                 echo "1 - перейти по полному пути 2 - выдать право исполнения файлу 3 - забрать право выполнения файла 4 - добавить скрипт как комманду"
+                echo " 5 - копировать файл "
                 reset
                 read -p "выбор:" ch
                 if [ "$ch" = "1" ]; then
@@ -179,10 +180,18 @@ while true; do
                 read -p "имя файла:" filename
                 [ -f "$filename" ] && mkdir -p "$HOME/bin" && cp "$filename" "$HOME/bin/" && chmod +x "$HOME/bin/$filename" || echo "файл не найден"; sleep 1
                 fi
+                if [ "$ch" = "5" ]; then
+                pyti=$("pwd")
+                echo "введите имя файла"
+                read -p "путь , ""$pyti""/ " copyfil
+                read -p "в (полный путь):" pastefil
+                cp  "$copyfil" "$pastefil"
+                fi
                 ;;
 
 
                 0)
+            echo "Дополнительные опции:"
             echo "Дополнительные опции:"
             echo "1 - Установить команду exproler для текущего пользователя"
             echo "2 - Выход"
@@ -218,3 +227,4 @@ while true; do
             ;;
     esac
 done
+(END
