@@ -11,7 +11,7 @@ reset()  { echo -e "\033[0m"; }
 
                       
 prev_dir="" 
-ver="2.1"
+ver="2.2"
 while true; do
     reset
     clear
@@ -160,7 +160,7 @@ while true; do
         13)
                 blue
                 echo "1 - перейти по полному пути 2 - выдать право исполнения файлу 3 - забрать право выполнения файла 4 - добавить скрипт как комманду"
-                echo " 5 - копировать файл "
+                echo " 5 - копировать файл 6 - выбрать флешку ( если подключена )  "
                 reset
                 read -p "выбор:" ch
                 if [ "$ch" = "1" ]; then
@@ -187,11 +187,14 @@ while true; do
                 read -p "в (полный путь):" pastefil
                 cp  "$copyfil" "$pastefil"
                 fi
+                if  [ "$ch" = "6" ]; then
+                pyti=$("pwd")
+                cd /run/media/"$user"
+                fi
                 ;;
 
 
                 0)
-            echo "Дополнительные опции:"
             echo "Дополнительные опции:"
             echo "1 - Установить команду exproler для текущего пользователя"
             echo "2 - Выход"
@@ -227,4 +230,3 @@ while true; do
             ;;
     esac
 done
-(END
